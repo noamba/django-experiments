@@ -1,6 +1,9 @@
 # noam's additions
 *.swp
 *.vim
+activate
+django/.ropeproject/
+django/db.sqlite3
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
