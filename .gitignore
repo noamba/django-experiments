@@ -4,6 +4,7 @@
 activate
 django/.ropeproject/
 django/db.sqlite3
+.ropeproject
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
