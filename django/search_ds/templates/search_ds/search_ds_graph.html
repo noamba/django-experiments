@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {% load staticfiles %}
+        <link rel="stylesheet" type="text/css" href="{% static 'search_ds/css/search_ds_graph.css' %}" />
+    </head>
+
+    <body>
+
+        <div class="chart"></div>
+        <script src="http://d3js.org/d3.v3.min.js"  charset="utf-8"></script>
+        <script>
+            var data = [{% for i in id_list %}{{ i }}, {% endfor %}];
+        </script>
+        <script src="{% static 'search_ds/js/search_ds.js' %}"></script>
+
+    </body>
+
+</html>
