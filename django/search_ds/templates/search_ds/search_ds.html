@@ -1,9 +1,0 @@
-{% if item_list %}
-    <ul>
-    {% for item in item_list %}
-        <li>{{ item.item_id }} {{ item.description}}</li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No items are available.</p>
-{% endif %}

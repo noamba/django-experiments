@@ -12,6 +12,13 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 
 import os
 
+# Queryset project specific settings
+
+NUMBER_OF_TOP_BRANDS_TO_CHART = 51
+BARS_IN_CHART = 10;
+
+# End of Queryset project specific settings
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -77,9 +84,12 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'queryset_proj',
+        'USER': 'n',
+        'PASSWORD': 'dcc45d',
+        'HOST': 'localhost',
+        'PORT': '', }
 }
 
 

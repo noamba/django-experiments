@@ -1,45 +1,47 @@
 from django.http import JsonResponse
 from django.shortcuts import render
-from django.http import Http404
+from django.db.models import Count
+from mysite.settings import NUMBER_OF_TOP_BRANDS_TO_CHART, BARS_IN_CHART
 
-from .models import Item
-
-
-def show_ds(request):
-
-    try:
-        item_list = Item.objects.all()[:5]
-    except:
-        raise Http404("Problem getting items")
-
-    context = {
-        'item_list': item_list,
-    }
-
-    return render(request, 'search_ds/search_ds.html', context)
+from .models import Brand
 
 
-def show_ds_graph(request):
+def top_brand_graph(request):
+    """
+    Renders a chart number of items per Brand.
+    The Brand with most items is on top.
+    """
 
-    id_list = []
-    try:
-        item_list = Item.objects.all()[:25]
-    except:
-        raise Http404("Problem getting items")
-
-    for i in item_list:
-        id_list.append(i.item_id)
+    top_brands = Brand.objects.annotate(number_of_items=Count('item')).\
+        order_by('-number_of_items')[:NUMBER_OF_TOP_BRANDS_TO_CHART]
 
     context = {
-        'id_list': id_list,
+        'top_brands': top_brands,
+        'bars_in_chart': BARS_IN_CHART,
+
     }
 
-    return render(request, 'search_ds/search_ds_graph.html', context)
+    return render(request, 'search_ds/top_brand_graph.html', context)
 
 
 def count_items_by_brand(request):
+    """
+    Returns json of Brands and the number of items they have in the database.
+    Only top brands are presented (ranked according to total items per brand).
 
-    # data = Item.objects.all()[20]
-    # data = [34, 65, 11]
-    data = {"Prada": "34", "Levis": "65", "Next": "11"}
-    return JsonResponse(data, safe=False)
+    """
+
+    # Create a list of dictionaries like:
+    # {'brand': 'Simply Be', 'total': 4360}, ... ]
+    top_brands_list_of_dicts = Brand.objects.values('name').\
+        annotate(number_of_items=Count('item')).\
+        order_by('-number_of_items')[:NUMBER_OF_TOP_BRANDS_TO_CHART]
+
+    # to convert to json, need first to convert data into one dictionary:
+    top_brands_dict =\
+        {d['name']: d['number_of_items'] for d in top_brands_list_of_dicts}
+
+    # JsonResponse will serialize a dict into json
+    # and httpresponse it with the correct Content-Type header:
+    # 'application/json'
+    return JsonResponse(top_brands_dict)
