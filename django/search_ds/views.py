@@ -6,6 +6,11 @@ from mysite.settings import NUMBER_OF_TOP_BRANDS_TO_CHART, BARS_IN_CHART
 from .models import Brand
 
 
+def index(request):
+
+    return render(request, 'search_ds/index.html', '')
+
+
 def top_brand_graph(request):
     """
     Renders a chart number of items per Brand.

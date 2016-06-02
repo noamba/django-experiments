@@ -14,7 +14,7 @@ import os
 
 # Queryset project specific settings
 
-NUMBER_OF_TOP_BRANDS_TO_CHART = 51
+NUMBER_OF_TOP_BRANDS_TO_CHART = 50
 BARS_IN_CHART = 10;
 
 # End of Queryset project specific settings

@@ -1,103 +1,33 @@
-<html>
-  <head>
-    <!--Load the AJAX API-->
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
-    <!--Load Bootstrap -->
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+{% extends "search_ds/base.html" %}
 
-    <script type="text/javascript">
+{% block head %}
+  {% load staticfiles %}
+  <script src="{% static 'search_ds/js/graph_top_brands.js' %}"></script>
+  <script>
+    var bars_in_chart = {{ bars_in_chart }};
 
-var bars_in_chart = {{ bars_in_chart }};
-
-    $(document).ready(function(){
-
-      $(".container").hide(); // hiding buttons
-
-      // Load the Visualization API and the corechart package.
-      google.charts.load('current', {'packages':['corechart']});
-     
-      //create array of arrays for all lines to be charted
-      var all_lines = [
-        {% for brand in top_brands %} ['{{ brand.name }}', {{ brand.number_of_items }}],
+    // create array of arrays for all brands to be charted
+    var all_lines = [
+        {% for brand in top_brands %}
+          ['{{ brand.name }}', {{ brand.number_of_items }}],
         {% endfor %}
-        ];
+      ];
+  </script>
+{% endblock head %}
 
-      // Set a callback to run when the Google Visualization API is loaded.
-      google.charts.setOnLoadCallback(function(){
-        drawChart(all_lines,0);
-        $(".container").fadeIn(1000);
-      });
-
-      // Create and populate a data table,
-      // instantiate the chart, pass in the data and
-      // draw it:
-      function drawChart(all_lines_arr, start_at_index) {
-
-        start_at_index_int = parseInt(start_at_index);
-        var last_possible_index_int = all_lines_arr.length - 1;
-
-        // if start index is out of bound, don't draw new chart
-        if ((start_at_index_int > last_possible_index_int) || 
-            (start_at_index_int <0)) {
-          return;
-        }
-
-        // Create the data table.
-        var data = new google.visualization.DataTable();
-        data.addColumn('string', 'Brand');
-        data.addColumn('number', 'Items');
-
-        // Showing part of the data
-        var slice_at = start_at_index_int + bars_in_chart;
-        data.addRows(all_lines.slice(start_at_index_int, slice_at));
-
-        // Set chart options
-        var options = {'title':'Items per Brand in Descending Order',
-                       'width':900,
-                       'height':700};
-
-        // Instantiate and draw chart, passing in some options.
-        var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
-        chart.draw(data, options);
-
-        //update next/prev buttons
-        $("#prev-btn").attr("start", start_at_index - bars_in_chart);
-        $("#nxt-btn").attr("start", start_at_index + bars_in_chart);
-                    
-      }
-
-      $("#prev-btn").click(function(){
-        drawChart(all_lines, parseInt($(this).attr("start")));
-      });  
-
-      $("#nxt-btn").click(function(){
-        drawChart(all_lines, parseInt($(this).attr("start")));
-      });  
-
-    });
-
-
-
-    </script>
-  </head>
-
-  <body>
+{% block main %}
+  <div class="col-md-10">
     <div class="row">
-      <div class="col-md-12">
-        <!--Div that will hold the pie chart-->
-        <div id="chart_div" style="height: 700px; width: 900px;">
-        </div>
+      <h3> Chart of Top Brands: Items per Brand in Descending Order</h3>
+      <!--Div that will hold the pie chart-->
+      <div id="chart_div" style="height: 500px; width: 900px;">
       </div>
     </div>
     <div class="row">
-      <div class="col-md-12">
-        <div class="container" >
-          <button type="button" class="btn btn-info btn-lg" id="prev-btn" start="">Previous Brands</button>
-          <button type="button" class="btn btn-info btn-lg" id="nxt-btn" start="">Next Brands</button>      
-        </div>
+      <div class="container" >
+        <button type="button" class="btn btn-info btn-lg" id="prev-btn" start="">Previous Brands</button>
+        <button type="button" class="btn btn-info btn-lg" id="nxt-btn" start="">Next Brands</button>      
       </div>
     </div>
-  </body>
-</html>
+  </div>
+{% endblock main %}
