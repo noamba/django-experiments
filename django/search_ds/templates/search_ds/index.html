@@ -20,12 +20,12 @@
     <li> Transform the datatset to normalized Django models (see <a href="https://github.com/noamba/django-experiments/blob/master/django/search_ds/models.py">models</a>) </li>
     <li> Create objects and save in the MySQL database (see the <a href="https://github.com/noamba/django-experiments/blob/master/django/get_csv.py">script</a> that does that) </li>
 
-    <li> Create a <a href="https://github.com/noamba/django-experiments/blob/master/django/search_ds/urls.py">url</a> and a <a href="https://github.com/noamba/django-experiments/blob/master/django/search_ds/views.py">view</a> to filter the brands with the most items, and, </li>
+    <li> Create a <a href="https://github.com/noamba/django-experiments/blob/master/django/search_ds/urls.py">url</a> and a <a href="https://github.com/noamba/django-experiments/blob/master/django/search_ds/views.py">view</a> to aggregate, order and filter the brands with the most items, and, </li>
     <li> Present these brands in a dynamic bar chart using Javascript, jQuery and Google Charts (see <a href="https://github.com/noamba/django-experiments/blob/master/django/search_ds/static/search_ds/js/graph_top_brands.js">here</a>), HTML, Bootstrap and CSS (see <a href="https://github.com/noamba/django-experiments/blob/master/django/search_ds/templates/search_ds/base.html">base</a> and <a href="https://github.com/noamba/django-experiments/blob/master/django/search_ds/templates/search_ds/top_brand_graph.html">graph</a> templates). And, finally </li>
     <li> Deploy to <a href="http://noamba.pythonanywhere.com">Pythonanywhere</a> </li>
 
   </ul>
-  <p>See the <a href="{% url 'top_brand_graph' %}">RESULT</a> and don't forget to click on the buttons...</p>
+  <p>See the <a href="{% url 'top_brand_graph' %}">RESULT</a> and check it out: hover over the bars and click on the buttons.</p>
   <p>For the web service json API, I wanted to provide the top companies and their corresponding total items. See the <a href="https://github.com/noamba/django-experiments/blob/master/django/search_ds/views.py">view</a> and the <a href="{% url 'count_items_by_brand' %}">RESULT</a>. Remember to use the <kbd>back arrow</kbd> in your browser to get back to this page.</p>
 
 {% endblock main %}
