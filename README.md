@@ -1,3 +1,3 @@
-Please check out the detailed explanation in the github wiki:
+Please check out the detailed explanation in the deployed website:
 
-https://github.com/noamba/django-experiments/wiki/Experiments-with-Django
+http://noamba.pythonanywhere.com/
