@@ -16,18 +16,13 @@
 {% endblock head %}
 
 {% block main %}
-  <div class="col-md-10">
-    <div class="row">
-      <h3> Chart of Top Brands: Items per Brand in Descending Order</h3>
-      <!--Div that will hold the pie chart-->
-      <div id="chart_div" style="height: 500px; width: 900px;">
-      </div>
+  <div class="chart_and_buttons">
+    <!--Div that will hold the pie chart-->
+    <div id="chart_div" style="height: 350px; width: 700px;">
     </div>
-    <div class="row">
-      <div class="container" >
-        <button type="button" class="btn btn-info btn-lg" id="prev-btn" start="">Previous Brands</button>
-        <button type="button" class="btn btn-info btn-lg" id="nxt-btn" start="">Next Brands</button>      
-      </div>
+    <div class="chart_button_box">
+      <button type="button" class="btn btn-info btn-md" id="prev-btn" start=""><span class="glyphicon glyphicon-backward"></span> Previous Brands</button>
+      <button type="button" class="btn btn-info btn-md" id="nxt-btn" start="">Next Brands <span class="glyphicon glyphicon-forward"></span></button>      
     </div>
   </div>
 {% endblock main %}

@@ -3,7 +3,7 @@
 
 $(document).ready(function(){
 
-  $(".container").hide(); // hide buttons initially
+  $(".chart_and_buttons").hide(); // hide buttons initially
 
   // load the visualization API and the core chart package.
   google.charts.load('current', {'packages':['corechart']});
@@ -11,7 +11,7 @@ $(document).ready(function(){
   // set a callback to run when the Google Visualization API is loaded.
   google.charts.setOnLoadCallback(function(){
   drawChart(all_lines,0);
-  $(".container").fadeIn(1000);
+  $(".chart_and_buttons").fadeIn(1000);
   });
 
   // create and populate a data table,
@@ -39,8 +39,12 @@ $(document).ready(function(){
   data.addRows(all_lines.slice(start_at_index_int, slice_at));
 
   // set chart options
-  var options = {'width':900,
-                 'height':500};
+  var options = {'title': 'Chart of Top Brands: Items per Brand in Descending Order', 
+                 'width':700,
+                 'height':350,
+                 'chartArea': {'width': '60%', 'height': '70%'},
+                 'legend': {'position': 'bottom'}
+                };
 
   // instantiate and draw chart, passing in some options.
   var chart = new google.visualization.BarChart(document.getElementById('chart_div'));

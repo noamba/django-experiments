@@ -1,31 +1,9 @@
-h1, h2 {
-  background-color: steelblue;
-  text-align: left;
-  padding: 3px;
-  margin: 1px;
+.title_box {
+  padding: 5px;
+  margin: 2px;
 }
 
-h1 {
-  font: 27px sans-serif;
-  color: white;
+.chart_button_box {
+  margin-top: 20px;
+  padding-left: 150px;
 }
-
-h3 {
-  font: 27px sans-serif;
-  font-weight: bold;
-  color: #8b2500;
-  background-color: white;
-  text-align: left;
-  padding: 4px;
-  margin: 50px;
-}
-
-.links_header {
-  font: 17px sans-serif;
-  background-color: #cae1ff;
-  text-align: left;
-  padding: 3px;
-  margin: 1px;
-  color: #8b2500;
-}
-

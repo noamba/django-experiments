@@ -1,1 +1,31 @@
 {% extends "search_ds/base.html" %}
+
+{% block main%}
+  <div class="well">
+    <p>In this small (and still developing) project I wanted to: </p> 
+    <ul>
+      <li> Use Python, Django, MySQL, Javascript, jQuery, HTML, CSS, Bootstrap etc. to create a practise website </li>
+      <li> Have this website responsive, that is, for it to render nicely on all devices including mobiles and tablets</li>
+      <li> Create a web service json API </li>
+      <li> Deploy the outcome to the web </li>
+    </ul>
+  </div>
+  <p>I started with a dataset that includes about 70,000 clothing items in csv format (view part of it <a href="https://raw.githubusercontent.com/noamba/django-experiments/master/django/search_dataset.csv">here</a> or download it <a href="https://github.com/noamba/django-experiments/blob/master/django/search_dataset.csv">here</a>).
+  </p>
+
+  <p>The following steps were to:</p>
+  <ul>
+    <li> Create a Django site and app (mysite and search_ds, see <a href="https://github.com/noamba/django-experiments/tree/master/django">here</a>)</li>
+    <li> Create a MySQL database</li>
+    <li> Transform the datatset to normalized Django models (see <a href="https://github.com/noamba/django-experiments/blob/master/django/search_ds/models.py">models</a>) </li>
+    <li> Create objects and save in the MySQL database (see the <a href="https://github.com/noamba/django-experiments/blob/master/django/get_csv.py">script</a> that does that) </li>
+
+    <li> Create a <a href="https://github.com/noamba/django-experiments/blob/master/django/search_ds/urls.py">url</a> and a <a href="https://github.com/noamba/django-experiments/blob/master/django/search_ds/views.py">view</a> to filter the brands with the most items, and, </li>
+    <li> Present these brands in a dynamic bar chart using Javascript, jQuery and Google Charts (see <a href="https://github.com/noamba/django-experiments/blob/master/django/search_ds/static/search_ds/js/graph_top_brands.js">here</a>), HTML, Bootstrap and CSS (see <a href="https://github.com/noamba/django-experiments/blob/master/django/search_ds/templates/search_ds/base.html">base</a> and <a href="https://github.com/noamba/django-experiments/blob/master/django/search_ds/templates/search_ds/top_brand_graph.html">graph</a> templates). And, finally </li>
+    <li> Deploy to <a href="http://noamba.pythonanywhere.com">Pythonanywhere</a> </li>
+
+  </ul>
+  <p>See the <a href="{% url 'top_brand_graph' %}">RESULT</a> and don't forget to click on the buttons...</p>
+  <p>For the web service json API, I wanted to provide the top companies and their corresponding total items. See the <a href="https://github.com/noamba/django-experiments/blob/master/django/search_ds/views.py">view</a> and the <a href="{% url 'count_items_by_brand' %}">RESULT</a>. Remember to use the <kbd>back arrow</kbd> in your browser to get back to this page.</p>
+
+{% endblock main %}

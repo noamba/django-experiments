@@ -1,7 +1,8 @@
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.db.models import Count
-from mysite.settings import NUMBER_OF_TOP_BRANDS_TO_CHART, BARS_IN_CHART
+from mysite.settings import NUMBER_OF_TOP_BRANDS_TO_CHART,\
+    NUMBER_OF_TOP_BRANDS_IN_API, BARS_IN_CHART
 
 from .models import Brand
 
@@ -40,7 +41,7 @@ def count_items_by_brand(request):
     # {'brand': 'Simply Be', 'total': 4360}, ... ]
     top_brands_list_of_dicts = Brand.objects.values('name').\
         annotate(number_of_items=Count('item')).\
-        order_by('-number_of_items')[:NUMBER_OF_TOP_BRANDS_TO_CHART]
+        order_by('-number_of_items')[:NUMBER_OF_TOP_BRANDS_IN_API]
 
     # to convert to json, need first to convert data into one dictionary:
     top_brands_dict =\
