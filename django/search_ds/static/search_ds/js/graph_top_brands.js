@@ -11,7 +11,7 @@ $(document).ready(function(){
   // set a callback to run when the Google Visualization API is loaded.
   google.charts.setOnLoadCallback(function(){
   drawChart(all_lines,0);
-  $(".chart_and_buttons").fadeIn(1000);
+  $(".chart_and_buttons").show();
   });
 
   // create and populate a data table,
