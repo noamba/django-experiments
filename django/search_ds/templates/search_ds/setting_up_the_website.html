@@ -1,0 +1,22 @@
+{% extends "search_ds/base.html" %}
+
+{% block main%}
+  <h2>Setting up the website</h2>
+  <div class="well">
+    <p>Very breifly, the steps to set up this website were:</p>
+    <p>
+      <ol>
+        <li> Install Virtualenv and Git.</li>
+        <li> Set up a Python 3 and Django 1.9 environment.</li>
+        <li> Create a Django project and app and push to Github 
+             (see mysite and search_ds 
+             <a href="https://github.com/noamba/django-experiments/tree/master/django">here</a>).
+        </li>
+        <li> Install a MySQL database.</li>
+        <li> Use Bootstrap and its Grid system to have the web pages responsive (i.e. render differently on different devices), see example 
+            <a href="https://github.com/noamba/django-experiments/blob/master/django/search_ds/templates/search_ds/base.html">here</a>.</li> 
+        <li> And finally, deploy from Github to <a href="http://noamba.pythonanywhere.com">Pythonanywhere</a>.</li>
+      </ol>
+    </p>
+  </div>
+{% endblock main %}

@@ -1,0 +1,212 @@
+
+{% extends "search_ds/base.html" %}
+
+{% block main%}
+  <h2>Speedy Python!</h2>
+  <div class="well">
+    <p> 
+      Following is an exercise in speeding up Python. It's more about Python than Django or Mysql. 
+      Using the same dataset (described <a href="{% url 'top_brand_graph' %}">here</a>), 
+      I wanted to experiment with improving the <em>search time</em> within the dataset by using different data
+      structures and cython (note: the time to <em> load</em> the dataset did not matter). 
+      To analyze performance I used Python's cProfile and timeit.<br>
+      The most optimized version, 
+      using cython, was more than 10 times faster than the 
+      naive approach(!).
+    </p>
+  </div>
+  <p>
+    Three programs were coded and analyzed:
+    <ol>
+        <li> The <a href="https://github.com/noamba/query-dataset/blob/master/search_app_base.py">naive data structure approach</a>: Using a list for all dataset items resulting in an O(n) solution.</li>
+        <li> The <a href="https://github.com/noamba/query-dataset/blob/master/search_app_improved.py">optimized data structure version</a>: Using dictionaries and sets to improve amortized time complexity to O(1).</li>
+        <li> The <a href="https://github.com/noamba/query-dataset/blob/master/c_search_app_improved.pyx">cythonised version of (2)</a>: Further optimization with c code.</li>
+    </ol>
+  </p>
+  <p>
+    Generally, each program queries a dataset one or more times and outputs for each query: The query, the number of matches and
+    the top 10 scores and corresponding matching items in descending order. For example:
+  </p>
+  <pre class="pre-scrollable bg-info">
+tencel 
+15
+1.0,Vanessa tencel trouser,Oasis
+1.0,Tencel utility dress,Label Lab
+1.0,Tencel skirt,Ann Harvey
+1.0,Tencel cargo trousers,Label Lab
+1.0,Tencel cargo trousers,Label Lab
+1.0,Oasis Vanessa Tencel Jacket,Oasis
+1.0,James Perse Tencel Silk Jersey V-Neck Tee,James Perse
+1.0,Grace button tencel trouser,Oasis
+1.0,Elie Tahari Plus Size "Bayle" Tencel Easy Pants,Elie Tahari
+1.0,Denim tencel trouser,Ann Harvey
+
+
+fat face WRAP dress
+8046
+1.0,Fat Face Wrap Front Tiered Dress,Fat Face
+0.75,Fat Face Twirl Print Dress,Fat Face
+0.75,Fat Face Striped Jersey Dress,Fat Face
+0.75,Fat Face Knitted 3/4 Sleeve Dress,Fat Face
+0.75,Fat Face Free Spirit Floral Jersey Dress,Fat Face
+0.75,Fat Face Floral Print Tea Dress,Fat Face
+0.75,Fat Face Broderie Anglaise Sleeveless Dress,Fat Face
+0.5,kate spade new york "Aubrey" Silk Pansy-Print Wrap Dress,Kate Spade New York
+0.5,Wrap shift dress,DKNY
+0.5,Wrap over taffetta dress,Linea
+
+  </pre>  
+  <p>
+    Inputs are: 
+    <ul>
+      <li> A <a href="https://github.com/noamba/query-dataset/blob/master/queries/queries.txt">text file with queries</a>, one query per line.</li> 
+      <li> The <a href="https://github.com/noamba/query-dataset/blob/master/data/search_dataset.csv">csv dataset</a> with about 70,000 clothing items, one item per line. Each item 
+      consists of 3 elements <em>id, item, brand</em>. </li>
+    </ul>
+  </p>
+  <p>
+    Scoring is based on the number of full and partial lower-case keyword occurrences in an entry.
+  </p>
+    <p>
+      Following is the output of the <a href="https://github.com/noamba/query-dataset/blob/master/efficiency_analysis.py">efficiency analysis</a>, highlighting the timings of the three programs (note: there are two timing results per check. The second result is a repeat run to be sure the timings are not heavily affected by non-related processing by the system): 
+    </p>
+    <p>
+      <pre class="pre-scrollable bg-info">
+```
+______General descriptive information_______
+
+    Number of queries (lines) in queries file (queries/queries.txt):  2
+    Number of items (lines) in dataset file (data/search_dataset.csv):  69258
+
+Descriptive information for search_app_improved: 
+
+    Keyword (first letters) Dictionary entries:  5151
+    Keyword (first letters) Dictionary avg. width (wider is slower):  70.60726072607261
+
+
+________TIMINGS with timeit_________
+
+<mark>**** Dataset as List (search_app_base) ****
+Time to load dataset: 
+[0.07699599300030968, 0.06918929500170634]
+<strong>Time to process query file (no dataset loading, no printout): 
+[1.0237973209987103, 1.002753077998932]</strong></mark>
+
+
+<mark>**** Dataset as Dictionaries (search_app_improved)****
+Time to load dataset: 
+[1.2686008180025965, 1.2663522990005731]
+<strong>Time to process query file (no dataset loading, no printout): 
+[0.10782761800146545, 0.10076834500068799]</strong></mark>
+
+
+<mark>**** In Cython (cythonised search_app_improved) ****
+Time to load dataset: 
+[1.2343492600011814, 1.24061114199867]
+<strong>Time to process query file (no dataset loading, no printout): 
+[0.07990729900120641, 0.08037057500041556]</strong></mark>
+
+
+
+______PROFILING WITH cProfile (with dataset loading, no printout)______
+ 
+**** search_app_base ****
+
+         9970501 function calls in 2.207 seconds
+
+   Ordered by: internal time
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+   138514    1.323    0.000    2.046    0.000 search_app_base.py:88(calculate_score_1)
+  7689080    0.463    0.000    0.463    0.000 {method 'lower' of 'str' objects}
+  1918240    0.210    0.000    0.210    0.000 {method 'startswith' of 'str' objects}
+    69258    0.082    0.000    0.084    0.000 search_app_base.py:37(<genexpr>)
+        2    0.062    0.031    2.109    1.054 search_app_base.py:50(process_query)
+   138516    0.049    0.000    0.049    0.000 {method 'split' of 'str' objects}
+        1    0.007    0.007    2.207    2.207 <string>:1(<module>)
+        1    0.006    0.006    0.090    0.090 search_app_base.py:32(load_dataset)
+      380    0.002    0.000    0.002    0.000 {built-in method utf_8_decode}
+        1    0.001    0.001    2.200    2.200 search_app_base.py:27(main)
+     8057    0.001    0.000    0.001    0.000 {method 'append' of 'list' objects}
+     8057    0.001    0.000    0.001    0.000 {built-in method len}
+      380    0.000    0.000    0.002    0.000 codecs.py:316(decode)
+        2    0.000    0.000    0.000    0.000 {built-in method open}
+        1    0.000    0.000    2.207    2.207 {built-in method exec}
+        1    0.000    0.000    2.109    2.109 search_app_base.py:42(process_query_file)
+        2    0.000    0.000    0.000    0.000 {built-in method nl_langinfo}
+        2    0.000    0.000    0.000    0.000 _bootlocale.py:23(getpreferredencoding)
+        2    0.000    0.000    0.000    0.000 codecs.py:306(__init__)
+        1    0.000    0.000    0.000    0.000 {built-in method reader}
+        2    0.000    0.000    0.000    0.000 codecs.py:257(__init__)
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+
+
+ 
+**** search_app_improved ****
+
+         977969 function calls in 1.650 seconds
+
+   Ordered by: internal time
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    1.263    1.263    1.389    1.389 search_app_improved.py:13(load_dataset)
+        1    0.102    0.102    1.650    1.650 <string>:1(<module>)
+    16572    0.079    0.000    0.128    0.000 search_app_improved.py:97(_find_match)
+   366261    0.068    0.000    0.068    0.000 {method 'add' of 'set' objects}
+    69260    0.034    0.000    0.034    0.000 {method 'split' of 'str' objects}
+   237756    0.026    0.000    0.026    0.000 {method 'startswith' of 'str' objects}
+    74464    0.017    0.000    0.017    0.000 {method 'copy' of 'set' objects}
+        2    0.016    0.008    0.157    0.079 search_app_improved.py:52(_process_one_query)
+     8292    0.011    0.000    0.140    0.000 search_app_improved.py:74(_calculate_score)
+    69258    0.010    0.000    0.010    0.000 {method 'join' of 'str' objects}
+    69260    0.010    0.000    0.010    0.000 {method 'lower' of 'str' objects}
+    33144    0.004    0.000    0.004    0.000 {method 'copy' of 'list' objects}
+      379    0.003    0.000    0.003    0.000 {built-in method utf_8_decode}
+        1    0.001    0.001    0.159    0.159 search_app_improved.py:46(process_query_file)
+     8283    0.001    0.000    0.001    0.000 {method 'remove' of 'list' objects}
+     8061    0.001    0.000    0.001    0.000 {method 'append' of 'list' objects}
+     8292    0.001    0.000    0.001    0.000 {built-in method len}
+        5    0.001    0.000    0.001    0.000 {method 'update' of 'set' objects}
+     8283    0.001    0.000    0.001    0.000 {method 'remove' of 'set' objects}
+      379    0.001    0.000    0.004    0.000 codecs.py:316(decode)
+        2    0.000    0.000    0.000    0.000 {built-in method open}
+        1    0.000    0.000    1.650    1.650 {built-in method exec}
+        1    0.000    0.000    1.548    1.548 search_app_improved.py:8(main)
+        2    0.000    0.000    0.000    0.000 _bootlocale.py:23(getpreferredencoding)
+        2    0.000    0.000    0.000    0.000 {built-in method nl_langinfo}
+        1    0.000    0.000    0.000    0.000 __init__.py:28(get_stop_words)
+        2    0.000    0.000    0.000    0.000 codecs.py:306(__init__)
+        1    0.000    0.000    0.000    0.000 {built-in method reader}
+        2    0.000    0.000    0.000    0.000 codecs.py:257(__init__)
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+
+
+ 
+**** cythonised c_search_app_improved ****
+
+         771 function calls in 1.389 seconds
+
+   Ordered by: internal time
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    1.386    1.386    1.389    1.389 {c_search_app_improved.main}
+      379    0.002    0.000    0.002    0.000 {built-in method utf_8_decode}
+      379    0.001    0.000    0.003    0.000 codecs.py:316(decode)
+        1    0.000    0.000    1.389    1.389 {built-in method exec}
+        2    0.000    0.000    0.000    0.000 {built-in method nl_langinfo}
+        2    0.000    0.000    0.000    0.000 _bootlocale.py:23(getpreferredencoding)
+        1    0.000    0.000    1.389    1.389 <string>:1(<module>)
+        1    0.000    0.000    0.000    0.000 __init__.py:28(get_stop_words)
+        2    0.000    0.000    0.000    0.000 codecs.py:306(__init__)
+        2    0.000    0.000    0.000    0.000 codecs.py:257(__init__)
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+
+```
+
+    </pre>
+  </p>
+  <p>&nbsp;</p>
+  <p>
+    To install and run these programs on linux, see the <a href="https://github.com/noamba/query-dataset/blob/master/README.md">README</a> file on my Github account. 
+  </p>
+{% endblock main %}

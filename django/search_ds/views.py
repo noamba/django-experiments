@@ -12,6 +12,11 @@ def index(request):
     return render(request, 'search_ds/index.html', '')
 
 
+def setting_up_the_website(request):
+
+    return render(request, 'search_ds/setting_up_the_website.html', '')
+
+
 def top_brand_graph(request):
     """
     Renders a chart number of items per Brand.
@@ -28,6 +33,11 @@ def top_brand_graph(request):
     }
 
     return render(request, 'search_ds/top_brand_graph.html', context)
+
+
+def data_structures_and_cython(request):
+
+    return render(request, 'search_ds/data_structures_and_cython.html', '')
 
 
 def count_items_by_brand(request):

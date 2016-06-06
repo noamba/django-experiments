@@ -16,6 +16,41 @@
 {% endblock head %}
 
 {% block main %}
+<h2> Django, Google Charts and a JSON API</h2>
+  <div class="well">
+    <p>
+      To start experimenting with Django, Javascript and jQuery I used a large-ish dataset of clothing items 
+      (OK, it's not the most inspiring collection of information, but it's good for a start...). 
+      I loaded the dataset to the database using the Django ORM and then charted the 'Top Brands' 
+      using Google Charts and created a web service API. 
+    </p>
+  </div>
+  <p> The dataset, containing about 70,000 clothing items was given as a csv file. Each line in the file described an item by three fields:  
+     <em>id, description </em>and<em> brand name </em> (view part of the file 
+     <a href="https://raw.githubusercontent.com/noamba/django-experiments/master/django/search_dataset.csv">here</a> 
+     or download it <a href="https://github.com/noamba/django-experiments/blob/master/django/search_dataset.csv">here</a>). 
+     To provide the 'Top 50 Brands' in this dataset in a visual way and as a JSON API I followed these steps:
+  </p>
+
+  <h4>Google Bar Chart</h4>
+  <ul>
+    <li> Create Django models that normalize the dataset (see the  
+         <a href="https://github.com/noamba/django-experiments/blob/master/django/search_ds/models.py">models</a>)
+    </li>
+    <li> Using a Python script: Create objects from the csv dataset and save in the MySQL database 
+         (see <a href="https://github.com/noamba/django-experiments/blob/master/django/get_csv.py">here</a>)
+    </li>
+    <li> Create a <a href="https://github.com/noamba/django-experiments/blob/master/django/search_ds/views.py">view</a> 
+         to aggregate, order and filter the brands with the most items, and,
+    </li>
+    <li> Present these brands in a dynamic bar chart using Javascript, jQuery and Google Charts
+         (see <a href="https://github.com/noamba/django-experiments/blob/master/django/search_ds/static/search_ds/js/graph_top_brands.js">here</a>),
+         and, HTML, Bootstrap and CSS (see <a href="https://github.com/noamba/django-experiments/blob/master/django/search_ds/templates/search_ds/base.html">base</a>
+         and <a href="https://github.com/noamba/django-experiments/blob/master/django/search_ds/templates/search_ds/top_brand_graph.html">graph</a> templates)
+    </li>
+  </ul>
+  <p>Check out the result below... Hover over the bars and click the buttons.</p>
+
   <div class="chart_and_buttons">
     <!--Div that will hold the pie chart-->
     <div id="chart_div" style="height: 350px; width: 700px;">
@@ -25,4 +60,12 @@
       <button type="button" class="btn btn-info btn-md" id="nxt-btn" start="">Next Brands <span class="glyphicon glyphicon-forward"></span></button>      
     </div>
   </div>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <h4>JSON API</h4>
+  <p>See the 
+     <a href="https://github.com/noamba/django-experiments/blob/master/django/search_ds/views.py">view</a> 
+     that creates the JSON API and the <a href="{% url 'count_items_by_brand' %}">result</a>. 
+     Remember to use your browser's <kbd>back arrow</kbd> to get back to this page.
+  </p>
 {% endblock main %}
