@@ -2,19 +2,20 @@
 
 {% block main%}
   <div class="well">
-    <p>In this small (and still developing) project I wanted to: </p> 
+    <p>In this small (yet still developing) project I wanted to: </p> 
     <ul>
+      <li> Explore Python and relevant technologies such as Cython and Google Charts using a larg-ish dataset</li>
       <li> Build a website with Python, Django, MySQL, Javascript, jQuery, HTML, CSS, Bootstrap etc. using Git and Github</li>
       <li> Have this website render nicely on all devices including mobiles and tablets</li>
-      <li> Explore Python and relevant technologies such as Cython and Google Charts using a larg-ish dataset</li>
     </ul>
   </div>
   <p>
+    See how a large-ish dataset was used for a short exploration of 
+    <a href="{% url 'top_brand_graph' %}">Django's ORM, Google Charts, Javascript and jQuery</a>. 
+    Then, check out how  
+    <a href="{% url 'data_structures_and_cython' %}">profiling, optimizing Python's data structure and using Cython</a> sped up 
+    searching within this dataset by more than 10 times(!).   
     For more details on how this website was set up, click <a href="{% url 'setting_up_the_website' %}">here</a>.
-    See <a href="{% url 'top_brand_graph' %}">here</a> how a large-ish dataset was used for a short exploration
-    of Django's ORM, Google Charts, Javascript and jQuery. Finally, <a href="{% url 'data_structures_and_cython' %}">check out</a> 
-    the how optimizing the data structure and using Cython sped up 
-    the search within this dataset by more than 10 times(!).   
   </p>
     
 {% endblock main %}
