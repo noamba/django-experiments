@@ -8,13 +8,15 @@ from .models import Brand
 
 
 def index(request):
-
     return render(request, 'search_ds/index.html', '')
 
 
 def setting_up_the_website(request):
-
     return render(request, 'search_ds/setting_up_the_website.html', '')
+
+
+def contact(request):
+    return render(request, 'search_ds/contact.html', '')
 
 
 def top_brand_graph(request):
