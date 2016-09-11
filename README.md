@@ -1,2 +1,2 @@
-Django website showcasing some work. Currently notdeployed.
+Django website showcasing some work. Was previously on pythonanywhere, currently not deployed.
 
