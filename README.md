@@ -1,3 +1,2 @@
-Please check out the detailed explanation in the deployed website:
+Django website showcasing some work. Currently notdeployed.
 
-http://noamba.pythonanywhere.com/
